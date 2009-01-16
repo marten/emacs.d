@@ -118,15 +118,15 @@
 ;; set frame title / icon title using filename or buffername
 ;; little trick (based on http://www.emacswiki.org/cgi-bin/wiki/ShadyTrees)
 ;; to replace  /home/foo with ~
-(defun djcb-title-format ()
+(defun mv-title-format ()
   (if buffer-file-name 
     (replace-regexp-in-string "\\\\" "/"
       (replace-regexp-in-string (regexp-quote (getenv "HOME")) "~"
         (convert-standard-filename buffer-file-name)))
     (buffer-name)))
 (setq 
-  frame-title-format '(:eval (djcb-title-format))
-  icon-title-format  '(:eval (concat "emacs:" (djcb-title-format))))
+  frame-title-format '(:eval (mv-title-format))
+  icon-title-format  '(:eval (concat "emacs:" (mv-title-format))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -207,7 +207,7 @@
  (global-set-key (kbd "<C-s-down>") 'next-error)
 
  ;; function keys
- (global-set-key (kbd "<f11>")  'djcb-full-screen-toggle)
+ (global-set-key (kbd "<f11>")  'mv-full-screen-toggle)
 
  ;; super key bindings
  (global-set-key (kbd "<s-right>") 'hs-show-block)
@@ -219,13 +219,13 @@
  ;; close the current buffer, just like in Win*
  (global-set-key (kbd "C-<f4>")  'kill-buffer-and-window)    
 
- (defmacro djcb-program-shortcut (name key &optional use-existing)
+ (defmacro mv-program-shortcut (name key &optional use-existing)
    "* macro to create a key binding KEY to start some terminal program PRG; 
      if USE-EXISTING is true, try to switch to an existing buffer"
    `(global-set-key ,key 
       '(lambda()
 	 (interactive)
-	 (djcb-term-start-or-switch ,name ,use-existing))))
+	 (mv-term-start-or-switch ,name ,use-existing))))
 
  ;; some special buffers are under Super + Function Key
  (global-set-key (kbd "s-<f7>")
@@ -261,14 +261,14 @@
 
  ;; zooming in and zooming out in emacs like in firefox
  ;; zooming; inspired by http://blog.febuiles.com/page/2/
- (defun djcb-zoom (n) (interactive)
+ (defun mv-zoom (n) (interactive)
    (set-face-attribute 'default (selected-frame) :height 
      (+ (face-attribute 'default :height) (* (if (> n 0) 1 -1) 10)))) 
 
- (global-set-key (kbd "C-+")      '(lambda()(interactive(djcb-zoom 1))))
- (global-set-key [C-kp-add]       '(lambda()(interactive(djcb-zoom 1))))
- (global-set-key (kbd "C--")      '(lambda()(interactive(djcb-zoom -1))))
- (global-set-key [C-kp-subtract]  '(lambda()(interactive(djcb-zoom -1))))
+ (global-set-key (kbd "C-+")      '(lambda()(interactive(mv-zoom 1))))
+ (global-set-key [C-kp-add]       '(lambda()(interactive(mv-zoom 1))))
+ (global-set-key (kbd "C--")      '(lambda()(interactive(mv-zoom -1))))
+ (global-set-key [C-kp-subtract]  '(lambda()(interactive(mv-zoom -1))))
 
  ;; cicle through buffers with Ctrl-Tab (like Firefox)
  ;; TODO: some smarter version that ignores certain buffers, see:
@@ -285,7 +285,7 @@
  ;; ido makes completing buffers and ffinding files easier
  ;; http://www.emacswiki.org/cgi-bin/wiki/InteractivelyDoThings
  ;; http://www.forcix.cx/weblog/2005-08-03.html
- (defun djcb-ido () 
+ (defun mv-ido () 
    (interactive)
    (ido-mode t)
    (setq 
@@ -301,7 +301,7 @@
      ido-max-prospects 16         ; don't spam my minibuffer
      ido-confirm-unique-completion t)) ; wait for RET, even with unique completion
 
- (when (require-maybe 'ido) (djcb-ido))
+ (when (require-maybe 'ido) (mv-ido))
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -448,7 +448,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;text-mode
-(defun djcb-text-mode-hook ()
+(defun mv-text-mode-hook ()
   (interactive)
   (set-fill-column 78)                    ; lines are 78 chars long ...         
   (auto-fill-mode t)                      ; ... and wrapped around automagically
@@ -457,7 +457,7 @@
   (when (require-maybe 'filladapt) ; do the intelligent wrapping of lines,...
     (filladapt-mode t))) ; ... (bullets, numbering) if
                                         ; available
-(add-hook 'text-mode-hook 'djcb-text-mode-hook)
+(add-hook 'text-mode-hook 'mv-text-mode-hook)
   
 ;; turn on autofill for all text-related modes
 (toggle-text-mode-auto-fill) 
@@ -468,7 +468,7 @@
 ; email / news
 ;;
 ;; remove parts of old email, and replace with <snip (n lines): ... >
-(defun djcb-snip (b e summ)
+(defun mv-snip (b e summ)
   "remove selected lines, and replace it with [snip:summary (n lines)]"
   (interactive "r\nsSummary:")
   (let ((n (count-lines b e)))
@@ -478,16 +478,16 @@
               n 
               (if (= 1 n) "" "s")))))
 
-(defun djcb-post-mode-hook ()
+(defun mv-post-mode-hook ()
   (interactive)
-  (djcb-text-mode-hook)    ; inherit text-mode settings 
+  (mv-text-mode-hook)    ; inherit text-mode settings 
   (setq fill-column 72)    ; rfc 1855 for usenet
   (when (require-maybe 'footnote-mode)   ;; give us footnotes
     (footnote-mode t))
   (set-face-foreground 'post-bold-face "#ffffff")
   (require-maybe 'boxquote)) ; put text in boxes
 
-(add-hook 'post-mode-hook 'djcb-post-mode-hook)
+(add-hook 'post-mode-hook 'mv-post-mode-hook)
 
 ;; post mode (used when editing mail / news)
 (autoload 'post-mode "post" "mode for e-mail" t)
@@ -501,7 +501,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; html/html-helper mode
 ;; my handy stuff for both html-helper and x(ht)ml mode
-(defun djcb-html-helper-mode-hook ()
+(defun mv-html-helper-mode-hook ()
   (interactive)
   (abbrev-mode t)             ; support abbrevs
   (auto-fill-mode -1)         ; don't do auto-filling
@@ -510,23 +510,16 @@
   ;; instead of one line in editor
   (when (require-maybe 'screen-lines) (screen-lines-mode t))
 
-  ;; my own texdrive, for including TeX formulae
-  ;; http://www.djcbsoftware.nl/code/texdrive/
-  (when (require-maybe 'texdrive) (texdrive-mode t))
-    
-  ;; use flyspell mode (turned-off)
-  ;; (when-available 'flyspell-mode  (flyspell-mode t))
-  
   (set-input-method nil) ;; no funky "o => o-umlaut action should happen
   
-  (set-key-func "C-c i"      (djcb-html-tag-region-or-point "em"))
-  (set-key-func "C-c b"      (djcb-html-tag-region-or-point "strong"))
-  (set-key-func "C-c s"      (djcb-html-tag-region-or-point "small"))
-  (set-key-func "C-c u"      (djcb-html-tag-region-or-point "u"))
-  (set-key-func "C-c -"      (djcb-html-tag-region-or-point "strike"))
-  (set-key-func "C-c tt"     (djcb-html-tag-region-or-point "tt"))
-  (set-key-func "C-c <down>" (djcb-html-tag-region-or-point "sub"))
-  (set-key-func "C-c <up>"   (djcb-html-tag-region-or-point "sup"))
+  (set-key-func "C-c i"      (mv-html-tag-region-or-point "em"))
+  (set-key-func "C-c b"      (mv-html-tag-region-or-point "strong"))
+  (set-key-func "C-c s"      (mv-html-tag-region-or-point "small"))
+  (set-key-func "C-c u"      (mv-html-tag-region-or-point "u"))
+  (set-key-func "C-c -"      (mv-html-tag-region-or-point "strike"))
+  (set-key-func "C-c tt"     (mv-html-tag-region-or-point "tt"))
+  (set-key-func "C-c <down>" (mv-html-tag-region-or-point "sub"))
+  (set-key-func "C-c <up>"   (mv-html-tag-region-or-point "sup"))
   (set-key "M-u a" "&auml;")
   (set-key "M-` a" "&agrave;")
   (set-key "M-e a" "&aacute;")    
@@ -543,66 +536,66 @@
   (set-key "M-` u" "&ugrave;")
   (set-key "M-e u" "&uacute;"))
 
-(add-hook 'html-helper-mode-hook 'djcb-html-helper-mode-hook)
+(add-hook 'html-helper-mode-hook 'mv-html-helper-mode-hook)
 (setq auto-mode-alist (cons '("\\.html$" . html-helper-mode) auto-mode-alist))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX/LaTex
-(defun djcb-tex-mode-hook ()
+(defun mv-tex-mode-hook ()
   (interactive)
 
   (setq TeX-parse-self t) ; Enable parse on load.
   (setq TeX-auto-save t) ; Enable parse on save.
 
-  (set-key-func "C-c 1"  (djcb-tex-tag-region-or-point-outside "section"))
-  (set-key-func "C-c 2"  (djcb-tex-tag-region-or-point-outside "subsection"))
-  (set-key-func "C-c 3"  (djcb-tex-tag-region-or-point-outside "subsubsection"))
+  (set-key-func "C-c 1"  (mv-tex-tag-region-or-point-outside "section"))
+  (set-key-func "C-c 2"  (mv-tex-tag-region-or-point-outside "subsection"))
+  (set-key-func "C-c 3"  (mv-tex-tag-region-or-point-outside "subsubsection"))
   
-  (set-key-func "C-c C-a l"  (djcb-tex-tag-region-or-point-outside "href{}"))
+  (set-key-func "C-c C-a l"  (mv-tex-tag-region-or-point-outside "href{}"))
 
-  (set-key-func "C-c i"  (djcb-tex-tag-region-or-point "em"))
-  (set-key-func "C-c b"  (djcb-tex-tag-region-or-point "bf"))
-  (set-key-func "C-c s"  (djcb-tex-tag-region-or-point "small"))
-  (set-key-func "C-c u"  (djcb-tex-tag-region-or-point "underline"))
-  (set-key-func "C-c tt" (djcb-tex-tag-region-or-point "tt")))
+  (set-key-func "C-c i"  (mv-tex-tag-region-or-point "em"))
+  (set-key-func "C-c b"  (mv-tex-tag-region-or-point "bf"))
+  (set-key-func "C-c s"  (mv-tex-tag-region-or-point "small"))
+  (set-key-func "C-c u"  (mv-tex-tag-region-or-point "underline"))
+  (set-key-func "C-c tt" (mv-tex-tag-region-or-point "tt")))
   
-(add-hook 'tex-mode-hook 'djcb-tex-mode-hook)
-(add-hook 'LaTeX-mode-hook 'djcb-tex-mode-hook)
+(add-hook 'tex-mode-hook 'mv-tex-mode-hook)
+(add-hook 'LaTeX-mode-hook 'mv-tex-mode-hook)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; some TeX/LaTeX-related functions
-(defun djcb-tex-tag-region (b e tag)
+(defun mv-tex-tag-region (b e tag)
   "put '{\tag...}' around text" 
   (let ((tb (concat "{\\" tag " ")))
     (insert 
      (concat tb (delete-and-extract-region b e) "}"))
     (goto-char (- (point) 1))))
 
-(defun djcb-tex-tag-region-or-point (el)
+(defun mv-tex-tag-region-or-point (el)
   "tag the region or the point if there is no region"
   (when (not mark-active)
     (set-mark (point)))
-  (djcb-tex-tag-region (region-beginning) (region-end) el))
+  (mv-tex-tag-region (region-beginning) (region-end) el))
 
-(defun djcb-tex-tag-region-outside (b e tag)
+(defun mv-tex-tag-region-outside (b e tag)
   "put '{\tag...}' around text" 
   (let ((tb (concat "\\" tag "{")))
     (insert 
       (concat tb (delete-and-extract-region b e) "}"))
     (goto-char (- (point) 1))))
 
-(defun djcb-tex-tag-region-or-point-outside (el)
+(defun mv-tex-tag-region-or-point-outside (el)
   "tag the region or the point if there is no region"
   (when (not mark-active)
     (set-mark (point)))
-  (djcb-tex-tag-region-outside (region-beginning) (region-end) el))
+  (mv-tex-tag-region-outside (region-beginning) (region-end) el))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Elisp
-(defun djcb-emacs-lisp-mode-hook ()
+(defun mv-emacs-lisp-mode-hook ()
   (interactive)
   
   ;; overrides the global f7 for compilation
@@ -619,7 +612,7 @@
     '(("\\<\\(require-maybe\\|when-available\\|add-hook\\|setq\\)" 
         1 font-lock-keyword-face prepend)))  
 )  
-(add-hook 'emacs-lisp-mode-hook 'djcb-emacs-lisp-mode-hook)
+(add-hook 'emacs-lisp-mode-hook 'mv-emacs-lisp-mode-hook)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -627,16 +620,16 @@
 ;; perl/cperl mode
 (defalias 'perl-mode 'cperl-mode) ; cperl mode is what we want
 
-(defun djcb-cperl-mode-hook ()
+(defun mv-cperl-mode-hook ()
   (interactive)
   (eval-when-compile (require 'cperl-mode))
   (setq 
-   cperl-hairy nil                  ; parse hairy perl constructs
+   cperl-hairy nil                ; parse hairy perl constructs
    cperl-indent-level 4           ; indent with 4 positions
    cperl-invalid-face (quote off) ; don't show stupid underlines
    cperl-electric-keywords t))    ; complete keywords
 
-(add-hook 'cperl-mode-hook 'djcb-cperl-mode-hook)
+(add-hook 'cperl-mode-hook 'mv-cperl-mode-hook)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 
@@ -654,7 +647,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; c-mode / c++-mode
-(defconst djcb-c-style
+(defconst mv-c-style
   '((c-tab-always-indent . t)))
   
 (defun include-guards ()
@@ -674,7 +667,7 @@
 
 ;; other customizations 
 
-(defun djcb-find-top-srcdir ()
+(defun mv-find-top-srcdir ()
   "try to return the top_srcdir (with configure.ac/configure.in/...), 
    or prompt user for a dir if it cannot be found."
   (interactive)
@@ -692,20 +685,20 @@
     (cd old-cwd)
     topdir))
 
-(defun djcb-update-gtags ()
+(defun mv-update-gtags ()
   "update or create the GNU/global tagfile from either the top srcdir 
    or the current dir if that cannot be found"
   (interactive)
-  (if (file-exists-p (concat (djcb-find-top-srcdir) "/GTAGS"))
+  (if (file-exists-p (concat (mv-find-top-srcdir) "/GTAGS"))
     (shell-command "global -u && echo 'updated tagfile'") ; update
     (shell-command "gtags && echo 'created tagfile'"))) ; create
 
-(defun djcb-c-mode-common ()
+(defun mv-c-mode-common ()
   (interactive) 
-  (c-add-style "djcb" djcb-c-style t)
+  (c-add-style "djcb" mv-c-style t)
 
   ;; start with the linux style
-  (c-set-style "linux" djcb-c-style)
+  (c-set-style "linux" mv-c-style)
   
   (hs-minor-mode t)
 
@@ -732,7 +725,7 @@
 
   (when (require-maybe 'gtags) 
     (gtags-mode t)
-    (djcb-update-gtags))
+    (mv-update-gtags))
     
   (when (require-maybe 'doxymacs)
     (doxymacs-mode t)
@@ -746,18 +739,18 @@
     '(("^[^\n]\\{80\\}\\(.*\\)$"
         1 font-lock-warning-face prepend))))
 
-(defun djcb-c++-mode ()
+(defun mv-c++-mode ()
   ;; warn when lines are > 100 characters (in c++-mode)
   (font-lock-add-keywords 'c++-mode 
     '(("^[^\n]\\{100\\}\\(.*\\)$"
         1 font-lock-warning-face prepend))))
 
 ;; run before all c-mode flavours
-(add-hook 'c-mode-common-hook 'djcb-c-mode-common) 
+(add-hook 'c-mode-common-hook 'mv-c-mode-common) 
 ;; run befor c mode
-;;(add-hook 'c-mode-hook 'djcb-c-mode)
+;;(add-hook 'c-mode-hook 'mv-c-mode)
 ;; run before c++ mode
-(add-hook 'c++-mode-hook 'djcb-c++-mode)
+(add-hook 'c++-mode-hook 'mv-c++-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -832,7 +825,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; elisp function/macros
 ;; switch to a buffer it already exists, otherwise return nil
-(defun djcb-term-start-or-switch (prg &optional use-existing)
+(defun mv-term-start-or-switch (prg &optional use-existing)
   "* run program PRG in a terminal buffer. If USE-EXISTING is non-nil "
   " and PRG is already running, switch to that buffer instead of starting"
   " a new instance."
@@ -851,7 +844,7 @@
 ;; code below makes emacs ask for username/password....; never a good
 ;; idea to put real login data in your .emacs...
 (when (require-maybe 'twittering-mode)
-  (defun djcb-twitter()
+  (defun mv-twitter()
     "start twittering mode (for starting Twitter),
      ask for password/username if needed"
     (interactive)
@@ -867,20 +860,20 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; some html-related functions
-(defun djcb-html-tag-region-or-point (el)
+(defun mv-html-tag-region-or-point (el)
   "tag the region or the point if there is no region"
   (when (not mark-active)
     (set-mark (point)))
-  (djcb-html-tag-region (region-beginning) (region-end) el))
+  (mv-html-tag-region (region-beginning) (region-end) el))
 
-(defun djcb-html-tag-region (b e el)
+(defun mv-html-tag-region (b e el)
   "put '<el>...</el>' around text" 
   (let ((tb (concat "<" el ">")) (te (concat "</" el ">")))
     (insert 
      (concat tb (delete-and-extract-region b e) te))
     (goto-char (- (point) (+ (length te) (- e b))))))
 
-(defun djcb-blog-insert-img (name align)
+(defun mv-blog-insert-img (name align)
   (interactive "sName of picture:\nsAlign:")
   (let ((img-dir "image/"))
     (insert
@@ -894,7 +887,7 @@
 ;; toggle full screen with F11; require 'wmctrl'
 ;; http://stevenpoole.net/blog/goodbye-cruel-word/
 (when (executable-find "wmctrl") ; apt-get install wmctrl
-  (defun djcb-full-screen-toggle ()
+  (defun mv-full-screen-toggle ()
     (interactive)
     (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen")))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
