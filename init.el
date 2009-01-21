@@ -6,8 +6,12 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; some constants
-(defconst elisp-path '("~/.emacs.d/vendor/")) ;; my elisp directories
+(defconst elisp-path '("~/.emacs.d/vendor/"
+                       "~/.emacs.d/vendor/rinari"
+                       "~/.emacs.d/vendor/nxhtml"
+		       "~/.emacs.d/vendor/color-theme")) ;; my elisp directories
 (mapcar '(lambda(p) (add-to-list 'load-path p)) elisp-path)
+;;(add-to-list 'load-path "~/.emacs.d/elpa/")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,7 +26,6 @@
   "*Do something if FUNCTION is available."
   `(when (fboundp ,func) ,foo)) 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; what kind of system are we using?  start with these, as it will influence
@@ -129,6 +132,12 @@
   icon-title-format  '(:eval (concat "emacs:" (mv-title-format))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; color theme
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-charcoal-black)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; bookmarks
@@ -148,6 +157,13 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ELPA, Emacs Lisp Package Archive
+;;(when (require-maybe 'package)
+;;  (package-initialize))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; erc, the emacs IRC client;http://www.emacswiki.org/emacs/ERC
 (when (require-maybe 'erc)
   (setq erc-nick "marten")
@@ -162,241 +178,220 @@
     (interactive)
     (erc :server "irc.foonetic.net" :port 6667 :nick "marten")
     ))
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; show-paren-mode
- ;; show a subtle blinking of the matching paren (the defaults are ugly)
- ;; http://www.emacswiki.org/cgi-bin/wiki/ShowParenMode
- (when-available 'show-paren-mode
-   (progn
-     (show-paren-mode t)
-     (setq show-paren-style 'expression)
-     (set-face-background 'show-paren-match-face "#eeeeee")
-     (set-face-attribute 'show-paren-match-face nil 
-       :weight 'normal :underline nil :overline nil :slant 'normal)))
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; show-paren-mode
+;; show a subtle blinking of the matching paren (the defaults are ugly)
+;; http://www.emacswiki.org/cgi-bin/wiki/ShowParenMode
+(when-available 'show-paren-mode
+		(progn
+		  (show-paren-mode t)
+		  (setq show-paren-style 'expression)
+		  (set-face-background 'show-paren-match-face "#1e1e1e")
+		  (set-face-attribute 'show-paren-match-face nil 
+				      :weight 'normal :underline nil :overline nil :slant 'normal)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; change cursor color based on mode
- ;; http://www.emacswiki.org/cgi-bin/wiki/download/cursor-chg.el
- (when (require-maybe 'cursor-chg)  ; Load this library
-   (change-cursor-mode 1) ; On for overwrite/read-only/input mode
-   (toggle-cursor-type-when-idle 1)) ; On when idle
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; global keybindings
+;;     the arg to 'kbd' is what you get when pushing C-h k and the key(s)
+(global-set-key (kbd "<backspace>") 'delete-backward-char) ; bs == bs 
+(global-set-key (kbd "<delete>")    'delete-char)  ; delete == delete    
+(global-set-key (kbd "<kp-delete>") 'delete-char)  ; keypad delete == delete
+(global-set-key (kbd "M-g")         'goto-line)    ; M-g  'goto-line
 
+;; C-pgup goes to the start, C-pgdw goes to the end, home/end move start/end of line
+(global-set-key [C-prior] '(lambda()(interactive)(goto-char (point-min))))
+(global-set-key [C-next]  '(lambda()(interactive)(goto-char (point-max))))
+(global-set-key (kbd "<home>")      'move-beginning-of-line) ; be less like osx here
+(global-set-key (kbd "<end>")       'move-end-of-line)       ; be windows like here
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; global keybindings
- ;;     the arg to 'kbd' is what you get when pushing C-h k and the key(s)
- (global-set-key (kbd "<backspace>") 'delete-backward-char) ; bs == bs 
- (global-set-key (kbd "<delete>")    'delete-char)  ; delete == delete    
- (global-set-key (kbd "<kp-delete>") 'delete-char)  ; keypad delete == delete
- (global-set-key (kbd "M-g")         'goto-line)    ; M-g  'goto-line
+;; step through errors; 's' is the Hyper or 'windows' key
+(global-set-key (kbd "<C-s-up>")   'previous-error) 
+(global-set-key (kbd "<C-s-down>") 'next-error)
 
- ;; C-pgup goes to the start, C-pgdw goes to the end, home/end move start/end of line
- (global-set-key [C-prior] '(lambda()(interactive)(goto-char (point-min))))
- (global-set-key [C-next]  '(lambda()(interactive)(goto-char (point-max))))
- (global-set-key (kbd "<home>")      'move-beginning-of-line) ; be less like osx here
- (global-set-key (kbd "<end>")       'move-end-of-line)       ; be windows like here
+;; function keys
+(global-set-key (kbd "<f11>")  'mv-full-screen-toggle)
 
- ;; step through errors; 's' is the Hyper or 'windows' key
- (global-set-key (kbd "<C-s-up>")   'previous-error) 
- (global-set-key (kbd "<C-s-down>") 'next-error)
+;; super key bindings
+(global-set-key (kbd "<s-right>") 'hs-show-block)
+(global-set-key (kbd "<s-left>")  'hs-hide-block)
+(global-set-key (kbd "<s-up>")    'hs-hide-all)
+(global-set-key (kbd "<s-down>")  'hs-show-all)
+(global-set-key (kbd "s-m")       'magit-status)
 
- ;; function keys
- (global-set-key (kbd "<f11>")  'mv-full-screen-toggle)
+;; close the current buffer, just like in Win*
+(global-set-key (kbd "C-<f4>")  'kill-buffer-and-window)    
 
- ;; super key bindings
- (global-set-key (kbd "<s-right>") 'hs-show-block)
- (global-set-key (kbd "<s-left>")  'hs-hide-block)
- (global-set-key (kbd "<s-up>")    'hs-hide-all)
- (global-set-key (kbd "<s-down>")  'hs-show-all)
- (global-set-key (kbd "s-m")       'magit-status)
-
- ;; close the current buffer, just like in Win*
- (global-set-key (kbd "C-<f4>")  'kill-buffer-and-window)    
-
- (defmacro mv-program-shortcut (name key &optional use-existing)
-   "* macro to create a key binding KEY to start some terminal program PRG; 
+(defmacro mv-program-shortcut (name key &optional use-existing)
+  "* macro to create a key binding KEY to start some terminal program PRG; 
      if USE-EXISTING is true, try to switch to an existing buffer"
-   `(global-set-key ,key 
-      '(lambda()
-	 (interactive)
-	 (mv-term-start-or-switch ,name ,use-existing))))
+  `(global-set-key ,key 
+		   '(lambda()
+		      (interactive)
+		      (mv-term-start-or-switch ,name ,use-existing))))
 
- ;; some special buffers are under Super + Function Key
- (global-set-key (kbd "s-<f7>")
-   (lambda()(interactive)(switch-to-buffer "&bitlbee")))
- (global-set-key (kbd "s-<f10>")  ;make <f10> switch to *scratch*     
-   (lambda()(interactive)(switch-to-buffer "*scratch*")))
- ;; shortcuts for some oft-used files...
- (global-set-key (kbd "s-<f11>") 
-   '(lambda()(interactive)(find-file "~/.emacs.d/org/todo.org"))) 
- (global-set-key (kbd "s-<f12>") 
-   '(lambda()(interactive)(find-file "~/.emacs.d/init.el"))) 
+;; some special buffers are under Super + Function Key
+(global-set-key (kbd "s-<f7>")
+		(lambda()(interactive)(switch-to-buffer "&bitlbee")))
+(global-set-key (kbd "s-<f10>")  ;make <f10> switch to *scratch*     
+		(lambda()(interactive)(switch-to-buffer "*scratch*")))
+;; shortcuts for some oft-used files...
+(global-set-key (kbd "s-<f11>") 
+		'(lambda()(interactive)(find-file "~/.emacs.d/org/todo.org"))) 
+(global-set-key (kbd "s-<f12>") 
+		'(lambda()(interactive)(find-file "~/.emacs.d/init.el"))) 
 
- ;; *fast* linenumbers on the left (unlike setnu.el)
- ;; http://www.emacsblog.org/2007/03/29/quick-tip-line-numbering/
- (global-set-key (kbd "<f6>") 'linum)
+;; *fast* linenumbers on the left (unlike setnu.el)
+;; http://www.emacsblog.org/2007/03/29/quick-tip-line-numbering/
+(global-set-key (kbd "<f6>") 'linum)
 
- ;; some commands for rectangular selections;
- ;; http://www.emacswiki.org/cgi-bin/wiki/RectangleMark
- (require 'rect-mark)
- (global-set-key (kbd "C-x r C-SPC") 'rm-set-mark)
- (global-set-key (kbd "C-w")  
-   '(lambda(b e) (interactive "r") 
-      (if rm-mark-active (rm-kill-region b e) (kill-region b e))))
- (global-set-key (kbd "M-w")  
-   '(lambda(b e) (interactive "r") 
-      (if rm-mark-active (rm-kill-ring-save b e) (kill-ring-save b e))))
- (global-set-key (kbd "C-x C-x")  
-   '(lambda(&optional p) (interactive "p") 
-      (if rm-mark-active (rm-exchange-point-and-mark p) (exchange-point-and-mark p))))
+;; some commands for rectangular selections;
+;; http://www.emacswiki.org/cgi-bin/wiki/RectangleMark
+(require 'rect-mark)
+(global-set-key (kbd "C-x r C-SPC") 'rm-set-mark)
+(global-set-key (kbd "C-w")  
+		'(lambda(b e) (interactive "r") 
+		   (if rm-mark-active (rm-kill-region b e) (kill-region b e))))
+(global-set-key (kbd "M-w")  
+		'(lambda(b e) (interactive "r") 
+		   (if rm-mark-active (rm-kill-ring-save b e) (kill-ring-save b e))))
+(global-set-key (kbd "C-x C-x")  
+		'(lambda(&optional p) (interactive "p") 
+		   (if rm-mark-active (rm-exchange-point-and-mark p) (exchange-point-and-mark p))))
 
- ;; ignore C-z, i keep on typing it accidentaly...
- (global-set-key (kbd "C-z") nil) 
+;; ignore C-z, i keep on typing it accidentaly...
+(global-set-key (kbd "C-z") nil) 
 
- ;; zooming in and zooming out in emacs like in firefox
- ;; zooming; inspired by http://blog.febuiles.com/page/2/
- (defun mv-zoom (n) (interactive)
-   (set-face-attribute 'default (selected-frame) :height 
-     (+ (face-attribute 'default :height) (* (if (> n 0) 1 -1) 10)))) 
+;; zooming in and zooming out in emacs like in firefox
+;; zooming; inspired by http://blog.febuiles.com/page/2/
+(defun mv-zoom (n) (interactive)
+  (set-face-attribute 'default (selected-frame) :height 
+		      (+ (face-attribute 'default :height) (* (if (> n 0) 1 -1) 10)))) 
 
- (global-set-key (kbd "C-+")      '(lambda()(interactive(mv-zoom 1))))
- (global-set-key [C-kp-add]       '(lambda()(interactive(mv-zoom 1))))
- (global-set-key (kbd "C--")      '(lambda()(interactive(mv-zoom -1))))
- (global-set-key [C-kp-subtract]  '(lambda()(interactive(mv-zoom -1))))
+(global-set-key (kbd "C-+")      '(lambda()(interactive(mv-zoom 1))))
+(global-set-key [C-kp-add]       '(lambda()(interactive(mv-zoom 1))))
+(global-set-key (kbd "C--")      '(lambda()(interactive(mv-zoom -1))))
+(global-set-key [C-kp-subtract]  '(lambda()(interactive(mv-zoom -1))))
 
- ;; cicle through buffers with Ctrl-Tab (like Firefox)
- ;; TODO: some smarter version that ignores certain buffers, see:
- ;; http://www.emacswiki.org/cgi-bin/wiki/ControlTABbufferCycling
- (global-set-key [(control tab)] 'bury-buffer)
+;; cicle through buffers with Ctrl-Tab (like Firefox)
+;; TODO: some smarter version that ignores certain buffers, see:
+;; http://www.emacswiki.org/cgi-bin/wiki/ControlTABbufferCycling
+(global-set-key [(control tab)] 'bury-buffer)
 
- ; isearch - the defaults are _so_ annoying... (well, not really global but..)
- (define-key isearch-mode-map (kbd "<backspace>") 'isearch-del-char) ; bs == bs 
- (define-key isearch-mode-map (kbd "<delete>") 'isearch-delete-char) ; del == del
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; ido makes completing buffers and ffinding files easier
- ;; http://www.emacswiki.org/cgi-bin/wiki/InteractivelyDoThings
- ;; http://www.forcix.cx/weblog/2005-08-03.html
- (defun mv-ido () 
-   (interactive)
-   (ido-mode t)
-   (setq 
-    ido-save-directory-list-file "~/.emacs.d/ido.last"
-    ido-ignore-buffers ;; ignore these guys
-    '("\\` " "^\*Mess" "^\*Back" "^\*scratch" ".*Completion" "^\*Ido")
-    ido-work-directory-list '("~/" "~/Desktop" "~/Documents")
-    ido-everywhere t            ; use for many file dialogs
-    ido-case-fold  t            ; be case-insensitive
-    ido-use-filename-at-point nil ; don't use filename at point (annoying)
-    ido-use-url-at-point nil      ;  don't use url at point (annoying)
-     ido-enable-flex-matching t  ; be flexible
-     ido-max-prospects 16         ; don't spam my minibuffer
-     ido-confirm-unique-completion t)) ; wait for RET, even with unique completion
-
- (when (require-maybe 'ido) (mv-ido))
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; emms, the emacs multimedia system
- (when (require-maybe 'emms-setup)
-   (emms-standard)
-   (emms-default-players)
-   (setq emms-source-file-default-directory "~/Music/"
-     emms-show-format "NP: %s"
-     emms-cache-file "~/.emacs.d/emms-cache")
-
-   ;; inspired by http://real.metasyntax.net:2357/guides/emacs.html
-   (setq emms-track-description-function
-     (lambda (track)
-       (let ((artist (emms-track-get track 'info-artist))
-	      (album  (emms-track-get track 'info-album))
-	      (number (emms-track-get track 'info-tracknumber))
-	      (title  (emms-track-get track 'info-title)))
-	 (if (and artist album title)
-	   (if number
-	     (format "%s: %s - [%03d] %s" artist album (string-to-int number) title)
-	     (format "%s: %s - %s" artist album title))
-	   (emms-track-simple-description track))))))
-
- (when (require-maybe 'emms-mode-line)
-   (emms-mode-line 1))
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;;  abbrevs (emacs will automagically expand abbreviations)
- ;;
- (setq abbrev-file-name          ;; tell emacs where to read abbrev
-       "~/.emacs.d/abbrev_defs")  ; definitions from...
- (abbrev-mode t)                 ; enable abbrevs (abbreviations) ...
- (setq default-abbrev-mode t
-   save-abbrevs t)       ; don't ask
- (when (file-exists-p abbrev-file-name)
-   (quietly-read-abbrev-file))   ;  don't tell
-
- (add-hook 'kill-emacs-hook  'write-abbrev-file) 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+					; isearch - the defaults are _so_ annoying... (well, not really global but..)
+(define-key isearch-mode-map (kbd "<backspace>") 'isearch-del-char) ; bs == bs 
+(define-key isearch-mode-map (kbd "<delete>") 'isearch-delete-char) ; del == del
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; backups  (emacs will write backups and number them)
- (setq make-backup-files t ; do make backups
-   backup-by-copying t ; and copy them ...
-   backup-directory-alist '(("." . "~/.emacs.d/backup/")) ; ... here
-   version-control t
-   kept-new-versions 2
-   kept-old-versions 5
-   delete-old-versions t)
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ido makes completing buffers and ffinding files easier
+;; http://www.emacswiki.org/cgi-bin/wiki/InteractivelyDoThings
+;; http://www.forcix.cx/weblog/2005-08-03.html
+(defun mv-ido () 
+  (interactive)
+  (ido-mode t)
+  (setq 
+   ido-save-directory-list-file "~/.emacs.d/ido.last"
+   ido-ignore-buffers ;; ignore these guys
+   '("\\` " "^\*Mess" "^\*Back" "^\*scratch" ".*Completion" "^\*Ido")
+   ido-work-directory-list '("~/" "~/Desktop" "~/Documents")
+   ido-everywhere t            ; use for many file dialogs
+   ido-case-fold  t            ; be case-insensitive
+   ido-use-filename-at-point nil ; don't use filename at point (annoying)
+   ido-use-url-at-point nil      ;  don't use url at point (annoying)
+   ido-enable-flex-matching t  ; be flexible
+   ido-max-prospects 16         ; don't spam my minibuffer
+   ido-confirm-unique-completion t)) ; wait for RET, even with unique completion
+
+(when (require-maybe 'ido) (mv-ido))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; time-stamps 
- ;; when there is a "Time-stamp: <>" in the first 10 lines of the file,
- ;; emacs will write time-stamp information there when saving the file.
- ;; see the top of this file for an example... 
- (setq 
-   time-stamp-active t          ; do enable time-stamps
-   time-stamp-line-limit 10     ; check first 10 buffer lines for Time-stamp: <>
-   time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ; date format
- (add-hook 'write-file-hooks 'time-stamp) ; update when saving
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; emms, the emacs multimedia system
+(when (require-maybe 'emms-setup)
+  (emms-standard)
+  (emms-default-players)
+  (setq emms-source-file-default-directory "~/Music/"
+	emms-show-format "NP: %s"
+	emms-cache-file "~/.emacs.d/emms-cache")
+
+  ;; inspired by http://real.metasyntax.net:2357/guides/emacs.html
+  (setq emms-track-description-function
+	(lambda (track)
+	  (let ((artist (emms-track-get track 'info-artist))
+		(album  (emms-track-get track 'info-album))
+		(number (emms-track-get track 'info-tracknumber))
+		(title  (emms-track-get track 'info-title)))
+	    (if (and artist album title)
+		(if number
+		    (format "%s: %s - [%03d] %s" artist album (string-to-int number) title)
+		  (format "%s: %s - %s" artist album title))
+	      (emms-track-simple-description track))))))
+
+(when (require-maybe 'emms-mode-line)
+  (emms-mode-line 1))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
- ;; recent files                                                                   
- (when (require-maybe 'recentf)
-   (setq recentf-save-file "~/.emacs.d/recentf"
-	 recentf-max-saved-items 500                                            
-	 recentf-max-menu-items 60)
-   (recentf-mode t))
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  abbrevs (emacs will automagically expand abbreviations)
+;;
+(setq abbrev-file-name          ;; tell emacs where to read abbrev
+      "~/.emacs.d/abbrev_defs")  ; definitions from...
+(abbrev-mode t)                 ; enable abbrevs (abbreviations) ...
+(setq default-abbrev-mode t
+      save-abbrevs t)       ; don't ask
+(when (file-exists-p abbrev-file-name)
+  (quietly-read-abbrev-file))   ;  don't tell
+
+(add-hook 'kill-emacs-hook  'write-abbrev-file) 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; backups  (emacs will write backups and number them)
+(setq make-backup-files t ; do make backups
+      backup-by-copying t ; and copy them ...
+      backup-directory-alist '(("." . "~/.emacs.d/backup/")) ; ... here
+      version-control t
+      kept-new-versions 2
+      kept-old-versions 5
+      delete-old-versions t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; macros to save me some type creating keyboard macros
- (defmacro set-key-func (key expr)
-   "macro to save me typing"
-   (list 'local-set-key (list 'kbd key) 
-	 (list 'lambda nil 
-	       (list 'interactive nil) expr)))
 
- (defmacro set-key (key str) (list 'local-set-key (list 'kbd key) str))
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
+;; recent files                                                                   
+(when (require-maybe 'recentf)
+  (setq recentf-save-file "~/.emacs.d/recentf"
+	recentf-max-saved-items 500                                            
+	recentf-max-menu-items 60)
+  (recentf-mode t))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ;; tramp, for remote access
- (setq tramp-default-method "ssh")
- ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; macros to save me some type creating keyboard macros
+(defmacro set-key-func (key expr)
+  "macro to save me typing"
+  (list 'local-set-key (list 'kbd key) 
+	(list 'lambda nil 
+	      (list 'interactive nil) expr)))
+
+(defmacro set-key (key str) (list 'local-set-key (list 'kbd key) str))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; tramp, for remote access
+(setq tramp-default-method "ssh")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -412,11 +407,17 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; flymake (on the fly syntax checking)
+(require 'flymake)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; time/date/calendar stuff
 (display-time)
 (setq holidays-in-diary-buffer          t
       mark-holidays-in-calendar         t
-      all-christian-calendar-holidays   t)
+      all-christian-calendar-holidays   nil)
 (setq display-time-24hr-format t
       display-time-day-and-date nil
       display-time-format ""
@@ -424,9 +425,9 @@
       display-time-use-mail-icon t
       display-time-load-average-threshold 20)
 
-(setq calendar-latitude 60.10)
-(setq calendar-longitude 24.56)
-(setq calendar-location-name "Helsinki, Finland")
+(setq calendar-latitude 53.19)
+(setq calendar-longitude 6.55)
+(setq calendar-location-name "Groningen, Netherlands")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -437,7 +438,6 @@
   (epa-file-enable))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;some special purpose modes
 ;; muttrc-mode (used when editing muttrc)
 ;; http://www.emacswiki.org/cgi-bin/wiki/download/muttrc-mode.el
 (when (locate-library "muttrc-mode")
@@ -497,7 +497,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; html/html-helper mode
 ;; my handy stuff for both html-helper and x(ht)ml mode
@@ -540,6 +539,7 @@
 (setq auto-mode-alist (cons '("\\.html$" . html-helper-mode) auto-mode-alist))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; TeX/LaTex
 (defun mv-tex-mode-hook ()
@@ -562,7 +562,6 @@
   
 (add-hook 'tex-mode-hook 'mv-tex-mode-hook)
 (add-hook 'LaTeX-mode-hook 'mv-tex-mode-hook)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; some TeX/LaTeX-related functions
 (defun mv-tex-tag-region (b e tag)
@@ -595,25 +594,79 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Elisp
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+
+(defun emacs-lisp-remove-elc-on-save ()
+  "If you're saving an elisp file, likely the .elc is no longer valid."
+  (make-local-variable 'after-save-hook)
+  (add-hook 'after-save-hook
+            (lambda ()
+              (if (file-exists-p (concat buffer-file-name "c"))
+                  (delete-file (concat buffer-file-name "c"))))))
+(add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)
+
 (defun mv-emacs-lisp-mode-hook ()
   (interactive)
-  
+
   ;; overrides the global f7 for compilation
   (local-set-key (kbd "<f7>") 'eval-buffer)
-      
+
   (set-input-method nil)       ; i don't want accented chars, funny "a etc.
-  (setq lisp-indent-offset 2) ; indent with two spaces, enough for lisp
 
   (font-lock-add-keywords nil 
-    '(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):" 
-        1 font-lock-warning-face prepend)))  
-  
+			  '(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):" 
+			     1 font-lock-warning-face prepend)))  
   (font-lock-add-keywords nil 
-    '(("\\<\\(require-maybe\\|when-available\\|add-hook\\|setq\\)" 
-        1 font-lock-keyword-face prepend)))  
-)  
+			  '(("\\<\\(require-maybe\\|when-available\\|add-hook\\|setq\\)" 
+			     1 font-lock-keyword-face prepend)))  
+  )  
 (add-hook 'emacs-lisp-mode-hook 'mv-emacs-lisp-mode-hook)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LISP / SLIME
+
+;; Paredit
+(autoload 'paredit-mode "paredit" "Minor mode for pseudo-structurally editing Lisp code." t)
+
+;; SLIME
+(add-to-list 'load-path "~/.emacs.d/vendor/slime")  ; your SLIME directory
+(require 'slime-autoloads)
+(setq inferior-lisp-program "/opt/local/bin/sbcl"
+      lisp-indent-function 'common-lisp-indent-function
+      slime-complete-symbol-function 'slime-fuzzy-complete-symbol
+      slime-startup-animation nil)
+
+(slime-setup '(slime-repl 
+	       slime-presentations
+	       slime-references
+	       slime-autodoc
+	       slime-fuzzy
+	       ;;slime-highlight-edits
+	       ))
+
+;; Lisp hooks
+(defun mv-lisp-mode-hook ()
+  (interactive)
+  (slime-mode t)
+  (paredit-mode t)
+  (local-set-key (kbd "\\\\") 'slime-complete-symbol)
+  (local-set-key (kbd "C-c <tab>") 'slime-complete-form)
+  (local-set-key [(?\()] 'paredit-open-list)
+  (local-set-key [(?\))] 'paredit-close-list)
+  (local-set-key [(return)] 'paredit-newline))
+
+(define-key slime-mode-map (kbd "C-t") 'transpose-sexps)
+(define-key slime-mode-map (kbd "C-M-t") 'transpose-chars)
+(define-key slime-mode-map (kbd "C-b") 'backward-sexp)
+(define-key slime-mode-map (kbd "C-M-b") 'backward-char)
+(define-key slime-mode-map (kbd "C-f") 'forward-sexp)
+(define-key slime-mode-map (kbd "C-M-f") 'forward-char)
+
+(add-hook 'lisp-mode-hook 'mv-lisp-mode-hook)
+(add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -630,18 +683,6 @@
    cperl-electric-keywords t))    ; complete keywords
 
 (add-hook 'cperl-mode-hook 'mv-cperl-mode-hook)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
-;; gtags
-(add-hook 'gtags-mode-hook 
-  (lambda()
-    (local-set-key (kbd "M-.") 'gtags-find-tag)   ; find a tag, also M-.
-    (local-set-key (kbd "M-,") 'gtags-find-rtag)  ; reverse tag
-    (local-set-key (kbd "s-n") 'gtags-pop-stack)
-    (local-set-key (kbd "s-p") 'gtags-find-pattern)
-    (local-set-key (kbd "s-g") 'gtags-find-with-grep)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 
@@ -765,11 +806,60 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ruby
+
+;; Invoke ruby with '-c' to get syntax checking
+(defun flymake-ruby-init ()
+  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+	 (local-file  (file-relative-name
+                       temp-file
+                       (file-name-directory buffer-file-name))))
+    (list "ruby" (list "-c" local-file))))
+
+(push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
+(push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
+
+(push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
+
 (defun mv-ruby-mode-hook ()
-  (ruby-electric-brace t)
-  (setq ruby-indent-level 2))
+  ;; HERE BE DRAGONS. 
+  ;; If you touch this, either nil or t, Emacs will add two spaces to the first line of any newly opened ruby file
+  ;; (ruby-electric-brace nil)
+
+  (setq ruby-indent-level 2)
+  (font-lock-add-keywords nil ;; highlight FIXME and friends
+    '(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):" 
+        1 font-lock-warning-face prepend)))
+
+  (if (and (not (null buffer-file-name))
+	   (file-writable-p buffer-filename))
+      (flymake-mode t)))
 (add-hook 'ruby-mode-hook 'mv-ruby-mode-hook)
 
+;; inferior ruby mode
+(autoload 'inf-ruby "inf-ruby" "Run an inferior Ruby process" t)
+(autoload 'inf-ruby-keys "inf-ruby" "" t)
+(eval-after-load 'ruby-mode
+  '(add-hook 'ruby-mode-hook 'inf-ruby-keys))
+
+;; ri is broken
+;;(require 'ri)
+
+;; rails minor mode
+(require 'rinari)
+
+;; rhtml mode: nXhtml and MuMaMo for supporting multiple major modes
+(load "~/.emacs.d/vendor/nxhtml/autostart.el")
+(setq 
+  nxhtml-global-minor-mode t
+  mumamo-chunk-coloring 'submode-colored
+  nxhtml-skip-welcome t
+  indent-region-mode t
+  rng-nxml-auto-validate-flag nil
+  nxml-degraded t)
+(add-to-list 'auto-mode-alist '("\\.html\\.erb\\'" . eruby-nxhtml-mumamo))
+
+;; haml and sass are templating languages for html and css
 (autoload 'haml-mode "haml-mode.el" "Major mode for editing haml files" t)
 (autoload 'sass-mode "sass-mode.el" "Major mode for editing sass files" t)
 (add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
@@ -835,6 +925,14 @@
                  (let ((buf (get-buffer bufname)))
                    (and buf (buffer-name (switch-to-buffer bufname))))))
       (ansi-term prg prg))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; haskell mode
+(load "~/.emacs.d/vendor/haskell-mode-2.4/haskell-site-file")
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -917,4 +1015,7 @@
 ;;(find-file "~/.emacs.d/org/todo.org")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FIN ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
