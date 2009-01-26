@@ -1,0 +1,10 @@
+---
+layout: posts
+title: $1
+---
+
+# {{ page.title }}
+
+<p class="meta">Groningen, ${2:DATUM}</p>
+
+$0
