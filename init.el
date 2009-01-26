@@ -657,12 +657,12 @@
   (local-set-key [(?\))] 'paredit-close-list)
   (local-set-key [(return)] 'paredit-newline))
 
-(define-key slime-mode-map (kbd "C-t") 'transpose-sexps)
-(define-key slime-mode-map (kbd "C-M-t") 'transpose-chars)
-(define-key slime-mode-map (kbd "C-b") 'backward-sexp)
-(define-key slime-mode-map (kbd "C-M-b") 'backward-char)
-(define-key slime-mode-map (kbd "C-f") 'forward-sexp)
-(define-key slime-mode-map (kbd "C-M-f") 'forward-char)
+;; (define-key slime-mode-map (kbd "C-t") 'transpose-sexps)
+;; (define-key slime-mode-map (kbd "C-M-t") 'transpose-chars)
+;; (define-key slime-mode-map (kbd "C-b") 'backward-sexp)
+;; (define-key slime-mode-map (kbd "C-M-b") 'backward-char)
+;; (define-key slime-mode-map (kbd "C-f") 'forward-sexp)
+;; (define-key slime-mode-map (kbd "C-M-f") 'forward-char)
 
 (add-hook 'lisp-mode-hook 'mv-lisp-mode-hook)
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
@@ -832,7 +832,7 @@
         1 font-lock-warning-face prepend)))
 
   (if (and (not (null buffer-file-name))
-	   (file-writable-p buffer-filename))
+	   (file-writable-p buffer-file-name))
       (flymake-mode t)))
 (add-hook 'ruby-mode-hook 'mv-ruby-mode-hook)
 
@@ -1019,3 +1019,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; FIN ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(safe-local-variable-values (quote ((outline-minor-mode . t)))))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
