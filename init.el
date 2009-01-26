@@ -12,6 +12,9 @@
 		       "~/.emacs.d/vendor/color-theme")) ;; my elisp directories
 (mapcar '(lambda(p) (add-to-list 'load-path p)) elisp-path)
 ;;(add-to-list 'load-path "~/.emacs.d/elpa/")
+
+;; Fix cocoa emacs not getting user path
+;;(setenv "PATH" (concat "~/bin:" (getenv "PATH")))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -299,7 +302,6 @@
    ido-save-directory-list-file "~/.emacs.d/ido.last"
    ido-ignore-buffers ;; ignore these guys
    '("\\` " "^\*Mess" "^\*Back" "^\*scratch" ".*Completion" "^\*Ido")
-   ido-work-directory-list '("~/" "~/Desktop" "~/Documents")
    ido-everywhere t            ; use for many file dialogs
    ido-case-fold  t            ; be case-insensitive
    ido-use-filename-at-point nil ; don't use filename at point (annoying)
@@ -462,6 +464,13 @@
 ;; turn on autofill for all text-related modes
 (toggle-text-mode-auto-fill) 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; markdown mode
+(autoload 'markdown-mode "markdown-mode.el"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown" . markdown-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -653,19 +662,29 @@
   (paredit-mode t)
   (local-set-key (kbd "\\\\") 'slime-complete-symbol)
   (local-set-key (kbd "C-c <tab>") 'slime-complete-form)
-  (local-set-key [(?\()] 'paredit-open-list)
-  (local-set-key [(?\))] 'paredit-close-list)
-  (local-set-key [(return)] 'paredit-newline))
+  (local-set-key (kbd "C-c <tab>") 'slime-complete-form))
 
-;; (define-key slime-mode-map (kbd "C-t") 'transpose-sexps)
-;; (define-key slime-mode-map (kbd "C-M-t") 'transpose-chars)
-;; (define-key slime-mode-map (kbd "C-b") 'backward-sexp)
-;; (define-key slime-mode-map (kbd "C-M-b") 'backward-char)
-;; (define-key slime-mode-map (kbd "C-f") 'forward-sexp)
-;; (define-key slime-mode-map (kbd "C-M-f") 'forward-char)
+(define-key lisp-mode-map (kbd "C-t") 'transpose-sexps)
+(define-key lisp-mode-map (kbd "C-M-t") 'transpose-chars)
+(define-key lisp-mode-map (kbd "C-b") 'backward-sexp)
+(define-key lisp-mode-map (kbd "C-M-b") 'backward-char)
+(define-key lisp-mode-map (kbd "C-f") 'forward-sexp)
+(define-key lisp-mode-map (kbd "C-M-f") 'forward-char)
 
 (add-hook 'lisp-mode-hook 'mv-lisp-mode-hook)
 (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; clojure / swank-clojure
+(add-to-list 'load-path "~/.emacs.d/vendor/swank-clojure")
+(setq swank-clojure-binary "~/bin/clojure")
+(add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+(add-to-list 'slime-lisp-implementations '(clojure ("clojure")))
+
+(require 'clojure-mode)
+(require 'swank-clojure-autoload)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -978,6 +997,14 @@
       (concat
         "<img src=\"" img-dir name "\" border=\"0\" align=\"" align "\">"))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; yasnippet for text snippets
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/snippets")
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; full-screen mode
