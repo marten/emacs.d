@@ -1,12 +1,11 @@
-;; -*-mode: Emacs-Lisp; outline-minor-mode:t-*- 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq debug-on-error nil) ; turn debugging on/off
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; some constants
-(defconst elisp-path '("~/.emacs.d/vendor/"
+(defconst elisp-path '("~/.emacs.d/"
+		       "~/.emacs.d/vendor/"
                        "~/.emacs.d/vendor/rinari"
                        "~/.emacs.d/vendor/nxhtml"
 		       "~/.emacs.d/vendor/color-theme")) ;; my elisp directories
@@ -14,7 +13,8 @@
 ;;(add-to-list 'load-path "~/.emacs.d/elpa/")
 
 ;; Fix cocoa emacs not getting user path
-;;(setenv "PATH" (concat "~/bin:" (getenv "PATH")))
+(if window-system 
+    (ns-grabenv "/bin/zsh" '("source ~/.zsh/.zshenv" "printenv")))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -161,8 +161,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ELPA, Emacs Lisp Package Archive
-;;(when (require-maybe 'package)
-;;  (package-initialize))
+(when (require-maybe 'package)
+  (package-initialize))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -636,55 +636,73 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LISP / SLIME
 
-;; Paredit
-(autoload 'paredit-mode "paredit" "Minor mode for pseudo-structurally editing Lisp code." t)
+;; ;; Paredit
+;; (autoload 'paredit-mode "paredit" "Minor mode for pseudo-structurally editing Lisp code." t)
 
-;; SLIME
-(add-to-list 'load-path "~/.emacs.d/vendor/slime")  ; your SLIME directory
-(require 'slime-autoloads)
-(setq inferior-lisp-program "/opt/local/bin/sbcl"
-      lisp-indent-function 'common-lisp-indent-function
-      slime-complete-symbol-function 'slime-fuzzy-complete-symbol
-      slime-startup-animation nil)
+;; ;; SLIME
+;; (add-to-list 'load-path "~/.emacs.d/vendor/slime")  ; your SLIME directory
+;; (require 'slime-autoloads)
+;; (setq inferior-lisp-program "/opt/local/bin/sbcl"
+;;       lisp-indent-function 'common-lisp-indent-function
+;;       slime-complete-symbol-function 'slime-fuzzy-complete-symbol
+;;       slime-startup-animation nil)
 
-(slime-setup '(slime-repl 
-	       slime-presentations
-	       slime-references
-	       slime-autodoc
-	       slime-fuzzy
-	       ;;slime-highlight-edits
-	       ))
+;; (slime-setup '(slime-repl 
+;; 	       slime-presentations
+;; 	       slime-references
+;; 	       slime-autodoc
+;; 	       slime-fuzzy
+;; 	       ;;slime-highlight-edits
+;; 	       ))
 
-;; Lisp hooks
-(defun mv-lisp-mode-hook ()
-  (interactive)
-  (slime-mode t)
-  (paredit-mode t)
-  (local-set-key (kbd "\\\\") 'slime-complete-symbol)
-  (local-set-key (kbd "C-c <tab>") 'slime-complete-form)
-  (local-set-key (kbd "C-c <tab>") 'slime-complete-form))
+;; ;; Lisp hooks
+;; (defun mv-lisp-mode-hook ()
+;;   (interactive)
+;;   (slime-mode t)
+;;   (paredit-mode t)
+;;   (local-set-key (kbd "\\\\") 'slime-complete-symbol)
+;;   (local-set-key (kbd "C-c <tab>") 'slime-complete-form)
+;;   (local-set-key (kbd "C-c <tab>") 'slime-complete-form))
 
-(define-key lisp-mode-map (kbd "C-t") 'transpose-sexps)
-(define-key lisp-mode-map (kbd "C-M-t") 'transpose-chars)
-(define-key lisp-mode-map (kbd "C-b") 'backward-sexp)
-(define-key lisp-mode-map (kbd "C-M-b") 'backward-char)
-(define-key lisp-mode-map (kbd "C-f") 'forward-sexp)
-(define-key lisp-mode-map (kbd "C-M-f") 'forward-char)
+;; (define-key lisp-mode-map (kbd "C-t") 'transpose-sexps)
+;; (define-key lisp-mode-map (kbd "C-M-t") 'transpose-chars)
+;; (define-key lisp-mode-map (kbd "C-b") 'backward-sexp)
+;; (define-key lisp-mode-map (kbd "C-M-b") 'backward-char)
+;; (define-key lisp-mode-map (kbd "C-f") 'forward-sexp)
+;; (define-key lisp-mode-map (kbd "C-M-f") 'forward-char)
 
-(add-hook 'lisp-mode-hook 'mv-lisp-mode-hook)
-(add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+;; (add-hook 'lisp-mode-hook 'mv-lisp-mode-hook)
+;; (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; clojure / swank-clojure
-(add-to-list 'load-path "~/.emacs.d/vendor/swank-clojure")
-(setq swank-clojure-binary "~/bin/clojure")
-(add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
-(add-to-list 'slime-lisp-implementations '(clojure ("clojure")))
+;; (add-to-list 'load-path "~/.emacs.d/vendor/swank-clojure")
+;; (setq swank-clojure-binary "/Users/marten/bin/clojure")
+;; (require 'slime)
+;; (add-to-list 'slime-lisp-implementations '(sbcl ("sbcl")))
+;; (add-to-list 'slime-lisp-implementations '(clojure ("~/bin/clojure")))
 
+;; (require 'clojure-mode)
+;; (require 'swank-clojure-autoload)
+
+(add-to-list 'load-path "~/src/clojure-mode")
 (require 'clojure-mode)
+
+(add-to-list 'load-path "~/.emacs.d/vendor/slime")
+(require 'slime)
+(slime-setup)
+
+(setq swank-clojure-jar-path "~/src/clojure/clojure.jar")
+	
+(add-to-list 'load-path "~/src/swank-clojure")
 (require 'swank-clojure-autoload)
+
+;; Uncomment to turn off the "beep" which sounded 
+;; everytime the top or bottom of a file was reached  
+;;(setq ring-bell-function 'ignore)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -840,6 +858,9 @@
 
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
 
+(add-to-list 'auto-mode-alist '("Capfile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+
 (defun mv-ruby-mode-hook ()
   ;; HERE BE DRAGONS. 
   ;; If you touch this, either nil or t, Emacs will add two spaces to the first line of any newly opened ruby file
@@ -860,6 +881,7 @@
 (autoload 'inf-ruby-keys "inf-ruby" "" t)
 (eval-after-load 'ruby-mode
   '(add-hook 'ruby-mode-hook 'inf-ruby-keys))
+
 
 ;; ri is broken
 ;;(require 'ri)
@@ -1004,6 +1026,27 @@
 (require 'yasnippet)
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/snippets")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; gnus
+(require-maybe 'gnus)
+(add-to-list 'gnus-secondary-select-methods '(nnimap "gmail"
+                                  (nnimap-address "imap.gmail.com")
+                                  (nnimap-server-port 993)
+                                  (nnimap-stream ssl)))
+
+(setq message-send-mail-function 'smtpmail-send-it
+      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials '(("smtp.gmail.com" 587 "marten@veldthuis.com" nil))
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      smtpmail-local-domain "veldthuis.com")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
