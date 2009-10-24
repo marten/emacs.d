@@ -192,7 +192,7 @@
 		(progn
 		  (show-paren-mode t)
 		  (setq show-paren-style 'expression)
-		  (set-face-background 'show-paren-match-face "#1e1e1e")
+		  (set-face-background 'show-paren-match-face "#171717")
 		  (set-face-attribute 'show-paren-match-face nil 
 				      :weight 'normal :underline nil :overline nil :slant 'normal)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -840,6 +840,15 @@
 (add-hook 'makefile-mode-hook 'mv-makefile-mode-hook)  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; erlang
+(setq load-path (cons  "/opt/local/lib/erlang/lib/tools-2.6.2/emacs/"
+		       load-path))
+(setq erlang-root-dir "/usr/local/otp")
+(setq exec-path (cons "/usr/local/otp/bin" exec-path))
+(require 'erlang-start)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ruby
@@ -1100,4 +1109,4 @@
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- )
+ '(mumamo-background-chunk-submode ((((class color) (min-colors 88) (background dark)) (:background "Black")))))
