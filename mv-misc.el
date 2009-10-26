@@ -4,6 +4,8 @@
   (mouse-wheel-mode t)
   (blink-cursor-mode -1))
 
+(normal-erase-is-backspace-mode 1)
+
 (add-hook 'before-make-frame-hook 'turn-off-tool-bar)
  
 (set-terminal-coding-system 'utf-8)
@@ -34,7 +36,7 @@
  '(default ((t (:inherit nil :stipple nil :background "white" :foreground "black"
 			 :inverse-video nil :box nil :strike-through nil
 			 :overline nil :underline nil :slant normal :weight normal
-			 :height 100 :width normal :foundry "unknown"
+			 :height 130 :width normal :foundry "unknown"
 			 :family "DejaVu Sans Mono")))))
 
 ;; Set this to whatever browser you use
