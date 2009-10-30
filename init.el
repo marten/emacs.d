@@ -27,6 +27,10 @@
 (require 'uniquify)
 (require 'ansi-color)
 (require 'recentf)
+(require 'paredit)
+(require 'magit)
+(require 'idle-highlight)
+(require 'org)
 
 ;; Load up my kits
 
@@ -37,6 +41,7 @@
 (require 'mv-lisps)
 (require 'mv-haskell)
 (require 'mv-ruby)
+(require 'mv-org)
 
 ;; You can keep system- or user-specific customizations here
 (setq system-specific-config (concat dotfiles-dir system-name ".el")
