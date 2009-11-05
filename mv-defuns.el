@@ -27,7 +27,7 @@
  
 (defun turn-off-tool-bar ()
   (tool-bar-mode -1))
- 
+
 (add-hook 'coding-hook 'local-column-number-mode)
 (add-hook 'coding-hook 'local-comment-auto-fill)
 (add-hook 'coding-hook 'turn-on-hl-line-mode)
@@ -45,6 +45,7 @@
           (0 (progn (compose-region (match-beginning 1) (match-end 1)
                                     ,(make-char 'greek-iso8859-7 107))
                     nil))))))
+
 ;; Other
 
 (defun recompile-init ()

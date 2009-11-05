@@ -30,5 +30,4 @@
      (idle-highlight +1)
      (run-coding-hook))))
 
-
 (provide 'mv-lisps)

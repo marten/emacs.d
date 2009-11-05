@@ -14,4 +14,4 @@
   (unless (eq major-mode 'org-mode)
     ad-do-it))
 
-(Provide 'mv-org)
+(provide 'mv-org)
