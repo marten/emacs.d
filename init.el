@@ -31,6 +31,7 @@
 (require 'magit)
 (require 'idle-highlight)
 (require 'org)
+(require 'yaml-mode)
 
 (if (file-exists-p "~/.notmuch-config") (require 'notmuch))
 
