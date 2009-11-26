@@ -39,6 +39,12 @@
 			 :height 90 :width normal :foundry "unknown"
 			 :family "DejaVu Sans Mono")))))
 
+;; Put autosave files (ie #foo#) in one place, *not*
+;; scattered all over the file system
+(defvar autosave-dir (concat "/tmp/emacs_autosaves/" (user-login-name) "/"))
+(make-directory autosave-dir t)
+(setq backup-directory-alist nil)
+
 ;; Set this to whatever browser you use
 (setq browse-url-browser-function 'browse-url-firefox)
 ;; (setq browse-url-browser-function 'browse-default-macosx-browser)

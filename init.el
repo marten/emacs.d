@@ -32,6 +32,8 @@
 (require 'idle-highlight)
 (require 'org)
 
+(if (file-exists-p "~/.notmuch-config") (require 'notmuch))
+
 ;; Load up my kits
 
 (require 'mv-defuns)
