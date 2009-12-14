@@ -27,7 +27,13 @@
 (require 'uniquify)
 (require 'ansi-color)
 (require 'recentf)
-(require 'notmuch)
+(require 'paredit)
+(require 'magit)
+(require 'idle-highlight)
+(require 'org)
+(require 'yaml-mode)
+
+(if (file-exists-p "~/.notmuch-config") (require 'notmuch))
 
 ;; Load up my kits
 
@@ -38,6 +44,7 @@
 (require 'mv-lisps)
 (require 'mv-haskell)
 (require 'mv-ruby)
+(require 'mv-org)
 
 ;; You can keep system- or user-specific customizations here
 (setq system-specific-config (concat dotfiles-dir system-name ".el")
