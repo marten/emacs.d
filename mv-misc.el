@@ -44,6 +44,7 @@
 (defvar autosave-dir (concat "/tmp/emacs_autosaves/" (user-login-name) "/"))
 (make-directory autosave-dir t)
 (setq backup-directory-alist nil)
+(setq make-backup-files nil)
 
 ;; Set this to whatever browser you use
 (setq browse-url-browser-function 'browse-url-firefox)
