@@ -27,6 +27,7 @@
 (require 'uniquify)
 (require 'ansi-color)
 (require 'recentf)
+(require 'notmuch)
 
 ;; Load up my kits
 
