@@ -33,7 +33,10 @@
 (require 'org)
 (require 'yaml-mode)
 
-(if (file-exists-p "~/.notmuch-config") (require 'notmuch))
+(if (file-exists-p "~/.notmuch-config") 
+  (progn 
+    (require 'notmuch)
+    (require 'mv-mail)))
 
 ;; Load up my kits
 
@@ -41,6 +44,9 @@
 (require 'mv-bindings)
 (require 'mv-misc)
 (require 'mv-registers)
+; (require 'mv-color-theme)
+
+;; Languages and major modes
 (require 'mv-lisps)
 (require 'mv-haskell)
 (require 'mv-ruby)
