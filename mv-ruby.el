@@ -3,9 +3,14 @@
      (ignore-errors (require 'ruby-compilation))
      (setq ruby-use-encoding-map nil)
      (add-hook 'ruby-mode-hook 'inf-ruby-keys)
+     (add-hook 'ruby-mode-hook 'ruby-folding-mode)
      (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
      (define-key ruby-mode-map (kbd "C-M-h") 'backward-kill-word)
      (define-key ruby-mode-map (kbd "C-c l") "lambda")))
+
+(defun ruby-folding-mode ()
+  (outline-minor-mode)
+  (setq outline-regexp " *\\(def \\|class\\|module\\|describe \\|it \\)"))
 
 (global-set-key (kbd "C-h r") 'ri)
 

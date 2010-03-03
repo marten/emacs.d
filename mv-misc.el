@@ -4,7 +4,7 @@
   (mouse-wheel-mode t)
   (blink-cursor-mode -1))
 
-(normal-erase-is-backspace-mode 1)
+;(normal-erase-is-backspace-mode 1)
 
 (add-hook 'before-make-frame-hook 'turn-off-tool-bar)
  
@@ -47,14 +47,14 @@
 (setq make-backup-files nil)
 
 ;; Set this to whatever browser you use
-(setq browse-url-browser-function 'browse-url-firefox)
+;; (setq browse-url-browser-function 'browse-url-firefox)
 ;; (setq browse-url-browser-function 'browse-default-macosx-browser)
 ;; (setq browse-url-browser-function 'browse-default-windows-browser)
 ;; (setq browse-url-browser-function 'browse-default-kde)
 ;; (setq browse-url-browser-function 'browse-default-epiphany)
 ;; (setq browse-url-browser-function 'browse-default-w3m)
-;; (setq browse-url-browser-function 'browse-url-generic
-;; browse-url-generic-program "~/src/conkeror/conkeror")
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "google-chrome")
  
 ;; Transparently open compressed files
 (auto-compression-mode t)

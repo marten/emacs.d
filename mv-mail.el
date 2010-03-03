@@ -1,5 +1,14 @@
 ;; notmuch mode
 
+(setq notmuch-folders '(("inbox" . "tag:inbox")
+                        ("tome" . "tag:inbox and (tag:to-me or tag:family)")
+                        ("work" . "tag:inbox and tag:rgoc")
+                        ("todo" . "tag:todo")
+                        ("list" . "tag:inbox AND tag:list")
+                        ("notmuch" . "tag:inbox AND tag:notmuch")
+                        ("sup" . "tag:inbox AND tag:sup")
+                        ))
+
 ;; message mode
 (setq message-directory nil ;;"~/mail/"
       message-auto-save-directory nil ;; "~/mail/drafts"
