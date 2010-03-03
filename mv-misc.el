@@ -33,10 +33,11 @@
 
 ;; set a font
 (custom-set-faces
- '(default ((t (:inherit nil :stipple nil :background "white" :foreground "black"
+ `(default ((t (:inherit nil :stipple nil :background "black" :foreground "white"
 			 :inverse-video nil :box nil :strike-through nil
 			 :overline nil :underline nil :slant normal :weight normal
-			 :height 120 :width normal :foundry "unknown"
+			 :height ,(cond ((eq (emacs-type) 'emacs-mac-window) 120)
+                                       (t 80)) :width normal :foundry "unknown"
 			 :family "DejaVu Sans Mono")))))
 
 ;; Put autosave files (ie #foo#) in one place, *not*
@@ -47,11 +48,11 @@
 (setq make-backup-files nil)
 
 ;; Set this to whatever browser you use
-(if (= window-system 'x)
-    (setq browse-url-browser-function 'browse-default-macosx-browser))
-(if (= window-system 'mac)
-    (setq browse-url-browser-function 'browse-url-generic
-	  browse-url-generic-program "google-chrome"))
+(cond ((eq (emacs-type) 'emacs-mac-window)
+       (setq browse-url-browser-function 'browse-default-macosx-browser))
+      ((eq (emacs-type) 'emacs-window)
+       (setq browse-url-browser-function 'browse-url-generic
+	     browse-url-generic-program "google-chrome")))
 
 ;; Other options:
 ;; (setq browse-url-browser-function 'browse-url-firefox)
@@ -83,9 +84,6 @@
 (set-default 'indent-tabs-mode nil)
 (set-default 'indicate-empty-lines t)
 (set-default 'imenu-auto-rescan t)
- 
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-(add-hook 'text-mode-hook 'turn-on-flyspell)
  
 (defvar coding-hook nil
   "Hook that gets run on activation of any programming mode.")

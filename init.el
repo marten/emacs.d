@@ -35,6 +35,7 @@
 (require 'idle-highlight)
 (require 'org)
 (require 'yaml-mode)
+(require 'emacs-type)
 
 (if (file-exists-p "~/.notmuch-config") 
   (progn 
@@ -48,6 +49,7 @@
 (require 'mv-misc)
 (require 'mv-registers)
 ; (require 'mv-color-theme)
+(require 'mv-irc)
 
 ;; Languages and major modes
 (require 'mv-lisps)

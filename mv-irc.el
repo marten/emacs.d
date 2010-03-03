@@ -6,12 +6,12 @@
   (interactive)
   (when (y-or-n-p "IRC? ")
     (erc :server "irc.mhil.net"     :port 6667
-         :nick "marten_home"        :full-name "Marten Veldthuis")
+         :nick "marten_work"        :full-name "Marten Veldthuis")
     (erc :server "irc.rgoc.rug.nl"  :port 6667
-         :nick "marten_home"        :full-name "Marten Veldthuis")
+         :nick "marten"        :full-name "Marten Veldthuis")
     ;(erc :server "irc.freenode.net" :port 6667
     ;     :nick "marten"             :full-name "Marten Veldthuis")
-  ))
+    ))
 
 (defun my-erc-refill (column)
   "Fill the ERC messages in the current buffer to COLUMN.

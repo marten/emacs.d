@@ -9,10 +9,6 @@
   (make-local-variable 'column-number-mode)
   (column-number-mode t))
 
-(defun local-comment-auto-fill ()
-  (set (make-local-variable 'comment-auto-fill-only-comments) t)
-  (auto-fill-mode nil))
-
 (defun turn-on-hl-line-mode ()
   (if window-system (hl-line-mode t)))
 
@@ -29,7 +25,6 @@
   (tool-bar-mode -1))
 
 (add-hook 'coding-hook 'local-column-number-mode)
-(add-hook 'coding-hook 'local-comment-auto-fill)
 (add-hook 'coding-hook 'turn-on-hl-line-mode)
 (add-hook 'coding-hook 'pretty-lambdas)
 
