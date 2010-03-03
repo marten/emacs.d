@@ -36,7 +36,7 @@
  '(default ((t (:inherit nil :stipple nil :background "white" :foreground "black"
 			 :inverse-video nil :box nil :strike-through nil
 			 :overline nil :underline nil :slant normal :weight normal
-			 :height 90 :width normal :foundry "unknown"
+			 :height 120 :width normal :foundry "unknown"
 			 :family "DejaVu Sans Mono")))))
 
 ;; Put autosave files (ie #foo#) in one place, *not*
@@ -47,14 +47,20 @@
 (setq make-backup-files nil)
 
 ;; Set this to whatever browser you use
+(if (= window-system 'x)
+    (setq browse-url-browser-function 'browse-default-macosx-browser))
+(if (= window-system 'mac)
+    (setq browse-url-browser-function 'browse-url-generic
+	  browse-url-generic-program "google-chrome"))
+
+;; Other options:
 ;; (setq browse-url-browser-function 'browse-url-firefox)
 ;; (setq browse-url-browser-function 'browse-default-macosx-browser)
+;; (setq browse-url-browser-function 'browse-url-firefox)
 ;; (setq browse-url-browser-function 'browse-default-windows-browser)
 ;; (setq browse-url-browser-function 'browse-default-kde)
 ;; (setq browse-url-browser-function 'browse-default-epiphany)
 ;; (setq browse-url-browser-function 'browse-default-w3m)
-(setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "google-chrome")
  
 ;; Transparently open compressed files
 (auto-compression-mode t)

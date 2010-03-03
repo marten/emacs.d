@@ -9,6 +9,17 @@
                         ("sup" . "tag:inbox AND tag:sup")
                         ))
 
+;(setq notmuch-command "notmuch")
+;(setq notmuch-remote-host "work")
+ 
+;(defadvice notmuch-show-get-filename (around 
+;				      notmuch-show-get-remote-filename 
+;				      activate)
+;  (setq ad-return-value (concat "/ssh:"
+;				notmuch-remote-host
+;				":"
+;				ad-do-it)))
+
 ;; message mode
 (setq message-directory nil ;;"~/mail/"
       message-auto-save-directory nil ;; "~/mail/drafts"
