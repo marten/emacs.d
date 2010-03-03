@@ -1,5 +1,8 @@
 ;;; init.el --- where emacs begins
 
+(set-background-color "black")
+(set-foreground-color "white")
+
 ;; Turn off mouse interface early in startup to avoid momentary display
 ;; You really don't need these; trust me.
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))

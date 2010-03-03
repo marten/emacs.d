@@ -1,0 +1,9 @@
+(require 'erc-join)
+(erc-autojoin-mode 1)
+(setq erc-autojoin-channels-alist
+      '(("irc.mhil.net" "#brak" "#perio" "#iwipw" "#ijbema")
+        ("irc.rgoc.rug.nl" "#roqua")
+        ("freenode.net" "#notmuch"))
+
+(setq erc-fill-function 'erc-fill-static)
+(setq erc-fill-static-center 15)
