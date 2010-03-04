@@ -36,8 +36,8 @@
  `(default ((t (:inherit nil :stipple nil :background "black" :foreground "white"
 			 :inverse-video nil :box nil :strike-through nil
 			 :overline nil :underline nil :slant normal :weight normal
-			 :height ,(cond ((eq (emacs-type) 'emacs-mac-window) 120)
-                                       (t 80)) :width normal :foundry "unknown"
+			 :height ,(cond ((eq (emacs-type) 'emacs-nt-window) 120)
+                                        (t 80)) :width normal :foundry "unknown"
 			 :family "DejaVu Sans Mono")))))
 
 ;; Put autosave files (ie #foo#) in one place, *not*
