@@ -4,7 +4,9 @@
   (mouse-wheel-mode t)
   (blink-cursor-mode -1))
 
-;(normal-erase-is-backspace-mode 1)
+;; fix delete key under macos
+(if (eq (emacs-type) 'emacs-nt-window) 
+    (normal-erase-is-backspace-mode 1))
 
 (add-hook 'before-make-frame-hook 'turn-off-tool-bar)
  

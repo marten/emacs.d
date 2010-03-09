@@ -8,10 +8,13 @@
     (erc :server "173.203.214.212" :port 6667
          :nick "marten" :full-name "Marten Veldthuis"
          :password "marten:foosandbars")
+    (erc :server "173.203.214.212" :port 6667
+         :nick "marten" :full-name "Marten Veldthuis"
+         :password "roqua:foosandbars")
 ;;    (erc :server "irc.mhil.net"     :port 6667
-;;         :nick "marten_work"        :full-name "Marten Veldthuis")
+;;         :nick "marten_work"        :full-name "Marten Veldthuis"
 ;;    (erc :server "irc.rgoc.rug.nl"  :port 6667
-;;         :nick "marten"        :full-name "Marten Veldthuis")
+;;         :nick "marten_home"        :full-name "Marten Veldthuis")
     ;(erc :server "irc.freenode.net" :port 6667
     ;     :nick "marten"             :full-name "Marten Veldthuis")
     ))
