@@ -50,6 +50,7 @@
 (require 'mv-registers)
 ; (require 'mv-color-theme)
 (require 'mv-irc)
+(require 'mv-buffers)
 
 ;; Languages and major modes
 (require 'mv-lisps)
