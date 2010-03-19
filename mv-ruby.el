@@ -1,6 +1,9 @@
+(add-to-list 'load-path (concat dotfiles-dir "vendor/rinari"))
+
 (eval-after-load 'ruby-mode
   '(progn
      (ignore-errors (require 'ruby-compilation))
+     (require 'rinari)
      (setq ruby-use-encoding-map nil)
      (add-hook 'ruby-mode-hook 'inf-ruby-keys)
      (add-hook 'ruby-mode-hook 'ruby-folding-mode)
@@ -95,5 +98,8 @@ exec-to-string command, but it works and seems fast"
                    (local-set-key (kbd "C-c d")
                                   'flymake-display-err-menu-for-current-line)
                    (flymake-mode t))))))
+
+;; Rinari
+(setq rinari-tags-file-name "TAGS")
 
 (provide 'mv-ruby)
