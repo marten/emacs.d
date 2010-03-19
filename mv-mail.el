@@ -1,3 +1,22 @@
+
+;; vm
+
+(add-to-list 'load-path
+             (expand-file-name "~/Downloads/vm-8.1.0-gnu23/lisp"))
+(add-to-list 'Info-default-directory-list
+             (expand-file-name "~/Downloads/vm-8.1.0-gnu23/info"))
+
+(require 'vm-autoloads)
+
+
+(setq vm-primary-inbox "imap:mail.messagingengine.com:143:INBOX:login:marten@fastmail.fm:*")
+(setq vm-imap-account-alist '(("imap:mail.messagingengine.com:143:*:login:marten@fastmail.fm:*" "marten")))
+(add-to-list 'vm-spool-files
+             '("/tmp/mail/IMAP-INBOX"
+               "imap:mail.messagingengine.com:143:INBOX:login:marten@fastmail.fm:*"
+               "/tmp/mail/IMAP-INBOX.CRASH"))
+
+
 ;; notmuch mode
 
 (setq notmuch-folders '(("inbox" . "tag:inbox")

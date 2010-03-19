@@ -18,6 +18,10 @@
                 (filename . "rgoc/patty/"))
                ("Quby"
                 (filename . "rgoc/quby/"))
+               ("IJbema"
+                (or
+                 (filename . "prj/ijbotma")
+                 (filename . "prj/ijbel")))
                ("Programming" ;; prog stuff not already in MyProjectX
                 (or
                  (mode . c-mode)

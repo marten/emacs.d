@@ -40,7 +40,7 @@
 			 :overline nil :underline nil :slant normal :weight normal
 			 :height ,(cond ((eq (emacs-type) 'emacs-nt-window) 120)
                                         (t 80)) :width normal :foundry "unknown"
-			 :family "DejaVu Sans Mono")))))
+			 :family "Monaco")))))
 
 ;; Put autosave files (ie #foo#) in one place, *not*
 ;; scattered all over the file system
