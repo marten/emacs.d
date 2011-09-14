@@ -22,6 +22,7 @@
 
 (add-hook 'ruby-mode-hook
           '(lambda ()
+             (add-hook 'before-save-hook 'delete-trailing-whitespace)
              (coding-hook)
              (inf-ruby-keys)
              (local-set-key (kbd "C-h r") 'yari)))
