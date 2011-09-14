@@ -1,4 +1,4 @@
-;; Time-stamp: <2011-09-11 23:05:30 (bozhidar)>
+;; Time-stamp: <2011-09-13 23:04:13 (bozhidar)>
 
 ;; Copyright (C) 2009-2011  Bozhidar Batsov.
 ;; This file is free software licensed under the terms of the
@@ -8,7 +8,7 @@
 ;; people as well. Hopefully, you'll find something of value for you
 ;; in it.
 
-;; Emacs Dev Kit is targeting ONLY Emacs 23.x. Older Emacs
+;; Emacs Dev Kit is targeting ONLY Emacs 23.x and Emacs 24.x. Older Emacs
 ;; versions are not supported.
 
 ;; a large part of Common Lisp implemented in Emacs Lisp
@@ -71,9 +71,9 @@ Emacs load path."
 (setq custom-file (concat dotfiles-dir "custom.el"))
 
 ;; a list of all configurations that must be loaded
-(defvar configs '(misc coding emacs-lisp common-lisp scheme c
+(defvar configs '(elpa misc coding emacs-lisp common-lisp scheme c
                        python ruby coffee-script haskell scala
-                       ibuffer erc auctex nxml org bindings))
+                       ibuffer erc auctex nxml org prolog bindings))
 (defun require-config (config)
   (message "Loading %s..." config)
   (require config)
