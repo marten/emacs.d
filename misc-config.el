@@ -29,6 +29,11 @@
 (global-font-lock-mode t)                ; always do syntax highlighting
 (setq require-final-newline t)           ; end files with a newline
 
+;; viper settings
+(setq viper-mode t)
+(require 'viper)
+(require 'vimpulse)
+
 ;; store all backup and autosave files in the tmp dir
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
