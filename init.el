@@ -1,7 +1,7 @@
 ;;; init.el --- where emacs begins
 
-(set-background-color "black")
-(set-foreground-color "white")
+;(set-background-color "#eee")
+;(set-foreground-color "white")
 
 ;; Turn off mouse interface early in startup to avoid momentary display
 ;; You really don't need these; trust me.
@@ -20,6 +20,23 @@
 (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
 (setq package-user-dir (concat dotfiles-dir "elpa"))
 (setq custom-file (concat dotfiles-dir "custom.el"))
+
+
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil t)
+  (url-retrieve
+   "https://github.com/dimitri/el-get/raw/master/el-get-install.el"
+   (lambda (s)
+     (end-of-buffer)
+     (eval-print-last-sexp))))
+
+(el-get 'sync)
+
+;; I'm a Vim-addict
+
+(setq viper-mode t)
+(require 'viper)
+(require 'vimpulse)
 
 ;; These should be loaded on startup rather than autoloaded on demand
 ;; since they are likely to be used in every session
