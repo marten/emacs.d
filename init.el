@@ -32,8 +32,8 @@
 
 (defvar dotfiles-dir "~/.emacs.d/" "The root Emacs Lisp source folder.")
 
-(add-to-list 'load-path (concat dotfiles-dir "global/"))
 
-(require 'mv-core)
-(require 'mv-theme)
-(require 'mv-evil)
+(add-to-list 'load-path (concat dotfiles-dir "init/"))
+(require 'init-core)
+(require 'init-theme)
+(require 'init-evil)

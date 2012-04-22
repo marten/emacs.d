@@ -2,4 +2,4 @@
 (scroll-bar-mode -1)
 (setq make-backup-files nil)
 
-(provide 'mv-core)
+(provide 'init-core)
