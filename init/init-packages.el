@@ -33,6 +33,7 @@
 	(:name evil)
 	(:name haml-mode)
 	(:name magit)
+  (:name markdown-mode)
 	(:name paredit)
 	(:name rinari)
 ;	(:name ruby-block)
