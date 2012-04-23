@@ -38,7 +38,8 @@
 	(:name rinari)
 ;	(:name ruby-block)
 	(:name ruby-end)
-	(:name rspec-mode)))
+	(:name rspec-mode)
+  (:name textmate)))
 
 (el-get 'sync (mapcar 'el-get-source-name el-get-sources))
 
