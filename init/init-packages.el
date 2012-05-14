@@ -16,30 +16,39 @@
       ;; If you don't specify a :type for a package, el-get will still default to a
       ;; built-in recipe, so this is a valid approach.
       '((:name color-theme-molokai
-	       :description "Molokai Color Theme for Emacs."
-	       :type github
-	       :pkgname "alloy-d/color-theme-molokai"
-	       :depends color-theme
-	       :prepare (autoload 'color-theme-molokai "color-theme-molokai"
-			  "color-theme: molokai" t))
-	(:name color-theme-tomorrow
-	       :description "Colour Schemes for Hackers"
-	       :website "https://github.com/chriskempson/tomorrow-theme"
-	       :type git
-	       :url "https://github.com/chriskempson/tomorrow-theme.git"
-	       :load-path "GNU Emacs"
-	       :post-init (add-to-list 'custom-theme-load-path default-directory))
-	(:name el-get)
-	(:name evil)
-	(:name haml-mode)
-	(:name magit)
-  (:name markdown-mode)
-	(:name paredit)
-	(:name rinari)
-;	(:name ruby-block)
-	(:name ruby-end)
-	(:name rspec-mode)
-  (:name textmate)))
+               :description "Molokai Color Theme for Emacs."
+               :type github
+               :pkgname "alloy-d/color-theme-molokai"
+               :depends color-theme
+               :prepare (autoload 'color-theme-molokai "color-theme-molokai" "color-theme: molokai" t))
+        (:name color-theme-tomorrow
+               :description "Colour Schemes for Hackers"
+               :website "https://github.com/chriskempson/tomorrow-theme"
+               :type git
+               :url "https://github.com/chriskempson/tomorrow-theme.git"
+               :load-path "GNU Emacs"
+               :post-init (add-to-list 'custom-theme-load-path default-directory))
+        (:name clojure-mode)
+        (:name el-get)
+        (:name evil)
+        (:name evil-leader)
+        (:name evil-surround)
+        (:name find-file-in-project)
+        (:name haml-mode)
+        (:name magit)
+        (:name markdown-mode)
+        (:name paredit)
+        (:name projectile
+               :type github
+               :pkgname "marten/projectile")
+        (:name powerline
+               :type github
+               :pkgname "yuanotes/powerline")
+        (:name rinari)
+        (:name ruby-end)
+        (:name rspec-mode)
+        (:name smex)
+        (:name textmate)))
 
 (el-get 'sync (mapcar 'el-get-source-name el-get-sources))
 

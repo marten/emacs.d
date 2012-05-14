@@ -5,4 +5,9 @@
 	  init-core
 	  init-theme
 	  init-ido
-	  init-evil))
+    init-find-file-in-project
+    init-evil
+    init-projectile
+    init-powerline
+	  init-evil
+    init-peepopen))
