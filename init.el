@@ -4,6 +4,7 @@
 	'(init-packages
 	  init-core
 	  init-theme
+    init-keys
 	  init-ido
     init-find-file-in-project
     init-evil
