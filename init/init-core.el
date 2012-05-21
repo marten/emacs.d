@@ -14,6 +14,10 @@
 (setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 
+; Highlight and remove trailing whitespace
+(setq show-trailing-whitespace t)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 (push (expand-file-name "/usr/local/bin") exec-path)
 (push (expand-file-name "~/bin") exec-path)
 

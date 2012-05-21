@@ -28,6 +28,7 @@
                :url "https://github.com/chriskempson/tomorrow-theme.git"
                :load-path "GNU Emacs"
                :post-init (add-to-list 'custom-theme-load-path default-directory))
+        (:name auctex)
         (:name clojure-mode)
         (:name el-get)
         (:name evil)
